@@ -1,0 +1,1400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arch Street Capital Advisors | Investor Relations</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-primary: #8DC63F;
+            --color-secondary: #232F3E;
+            --color-accent: #A7A9AC;
+            --color-bg: #FFFFFF;
+            --color-bg-alt: #F8F9FA;
+            --color-text: #232F3E;
+            --color-text-light: #6c757d;
+            --color-border: #dee2e6;
+            --font-heading: 'Playfair Display', serif;
+            --font-body: 'Inter', sans-serif;
+            --border-radius: 8px;
+            --shadow-sm: 0 2px 4px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+            --shadow-lg: 0 10px 30px rgba(0,0,0,0.1);
+            --transition-speed: 0.3s;
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            overflow-x: hidden;
+        }
+
+        /* --- UTILITY CLASSES --- */
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .section {
+            padding: 80px 0;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+
+        .section.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .section:nth-child(odd) {
+            background-color: var(--color-bg-alt);
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+            cursor: pointer;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .section-header h2 {
+            font-family: var(--font-heading);
+            font-size: 2.5rem;
+            color: var(--color-secondary);
+            margin-bottom: 8px;
+            display: inline-block;
+        }
+        
+        .section-header .toggle-icon {
+            display: inline-block;
+            margin-left: 15px;
+            font-size: 1.5rem;
+            color: var(--color-primary);
+            transition: transform var(--transition-speed) ease;
+            vertical-align: middle;
+        }
+
+        .section.collapsed .toggle-icon {
+            transform: rotate(-45deg);
+        }
+
+        .section-content {
+            max-height: 5000px; /* Large enough for content */
+            overflow: hidden;
+            transition: max-height 0.7s ease-in-out, opacity 0.5s ease;
+            opacity: 1;
+        }
+
+        .section.collapsed .section-content {
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+        }
+
+        /* --- NAVIGATION --- */
+        .main-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 16px 0;
+            box-shadow: var(--shadow-sm);
+            transition: padding var(--transition-speed) ease;
+        }
+
+        .main-nav .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .nav-logo svg {
+            height: 40px;
+            width: auto;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 24px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--color-text-light);
+            font-weight: 500;
+            font-size: 0.9rem;
+            position: relative;
+            padding: 8px 0;
+            transition: color var(--transition-speed) ease;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--color-primary);
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform var(--transition-speed) ease;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--color-secondary);
+        }
+
+        .nav-links a.active::after {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+        
+        .mobile-nav-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 2rem;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: var(--color-bg);
+            position: relative;
+            overflow: hidden;
+            background-color: var(--color-secondary);
+        }
+
+        #hero-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            animation: fadeIn 2s ease-in-out;
+        }
+
+        .hero-logo {
+            margin-bottom: 24px;
+        }
+        
+        .hero-logo svg {
+            width: 250px;
+            height: auto;
+        }
+        
+        .hero-logo svg path { stroke: var(--color-accent); }
+        .hero-logo svg text:nth-of-type(1) { fill: var(--color-bg); }
+        .hero-logo svg text:nth-of-type(2) { fill: var(--color-accent); }
+
+        .hero h1 {
+            font-family: var(--font-heading);
+            font-size: 3.5rem;
+            margin-bottom: 16px;
+            letter-spacing: 1px;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--color-accent);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .hero-stats-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: rgba(0,0,0,0.2);
+            padding: 24px 0;
+            z-index: 3;
+        }
+
+        .hero-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            text-align: center;
+        }
+
+        .hero-stat {
+            cursor: pointer;
+        }
+
+        .hero-stat .value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--color-primary);
+        }
+
+        .hero-stat .label {
+            font-size: 0.9rem;
+            color: var(--color-accent);
+            margin-top: 4px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- OVERVIEW SECTION --- */
+        #overview .section-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        #overview p {
+            font-size: 1.1rem;
+            color: var(--color-text-light);
+            margin-bottom: 24px;
+        }
+        #overview .overview-bullets {
+            list-style: none;
+            text-align: left;
+            margin-top: 32px;
+        }
+        #overview .overview-bullets li {
+            padding: 12px 0 12px 30px;
+            position: relative;
+            cursor: pointer;
+            transition: background-color var(--transition-speed) ease;
+            border-radius: var(--border-radius);
+        }
+        #overview .overview-bullets li:hover {
+            background-color: #e9ecef;
+        }
+        #overview .overview-bullets li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            top: 12px;
+            color: var(--color-primary);
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        /* --- INVESTMENT HIGHLIGHTS & ADVANTAGES --- */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .card {
+            background-color: var(--color-bg);
+            border-radius: var(--border-radius);
+            padding: 32px;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--color-border);
+            transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease, border-color var(--transition-speed) ease;
+            cursor: pointer;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--color-primary);
+        }
+
+        .card h3 {
+            font-family: var(--font-heading);
+            font-size: 1.5rem;
+            color: var(--color-secondary);
+            margin-bottom: 16px;
+        }
+
+        .card p, .card ul {
+            color: var(--color-text-light);
+            font-size: 0.95rem;
+        }
+
+        .card ul {
+            list-style: none;
+            margin-top: 16px;
+        }
+
+        .card ul li {
+            padding-left: 24px;
+            position: relative;
+            margin-bottom: 8px;
+        }
+
+        .card ul li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: var(--color-primary);
+            font-size: 1.2rem;
+            line-height: 1;
+        }
+
+        .card .key-metric {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-top: 24px;
+            text-align: right;
+        }
+        
+        .card .icon {
+            font-size: 2.5rem;
+            color: var(--color-primary);
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+
+        /* --- TRACK RECORD SECTION --- */
+        #track-record .section-content {
+            text-align: center;
+        }
+        #track-record p {
+            max-width: 600px;
+            margin: 0 auto 40px auto;
+            color: var(--color-text-light);
+            font-size: 1.1rem;
+        }
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .metric-card {
+            background-color: var(--color-bg);
+            padding: 24px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--color-border);
+            cursor: pointer;
+            transition: all var(--transition-speed) ease;
+        }
+        .metric-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--color-primary);
+        }
+        .metric-card .value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--color-primary);
+        }
+        .metric-card .label {
+            font-weight: 500;
+            color: var(--color-secondary);
+            margin-top: 8px;
+        }
+
+        /* --- FUND DETAILS TABLE --- */
+        .table-container {
+            background-color: var(--color-bg);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-md);
+            overflow: hidden;
+            border: 1px solid var(--color-border);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 16px 24px;
+            text-align: left;
+        }
+        th {
+            background-color: var(--color-bg-alt);
+            font-weight: 600;
+            color: var(--color-secondary);
+        }
+        tr {
+            cursor: pointer;
+            transition: background-color var(--transition-speed) ease;
+        }
+        tr:not(:last-child) {
+            border-bottom: 1px solid var(--color-border);
+        }
+        tr:hover {
+            background-color: #e9f5db;
+        }
+        td:first-child {
+            font-weight: 500;
+            color: var(--color-secondary);
+        }
+
+        /* --- CASE STUDY SECTION --- */
+        .case-study-container {
+            display: flex;
+            gap: 40px;
+            align-items: flex-start;
+            background: var(--color-bg);
+            padding: 40px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--color-border);
+        }
+        .case-study-content {
+            flex: 2;
+        }
+        .case-study-content h3 {
+            font-family: var(--font-heading);
+            font-size: 1.8rem;
+            margin-bottom: 16px;
+        }
+        .case-study-content p {
+            color: var(--color-text-light);
+            margin-bottom: 24px;
+        }
+        .case-study-data {
+            flex: 1;
+            background-color: var(--color-bg-alt);
+            padding: 24px;
+            border-radius: var(--border-radius);
+            border-left: 4px solid var(--color-primary);
+        }
+        .case-study-data ul {
+            list-style: none;
+        }
+        .case-study-data li {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--color-border);
+            cursor: pointer;
+            transition: background-color var(--transition-speed) ease;
+            margin: 0 -24px;
+            padding: 12px 24px;
+        }
+        .case-study-data li:last-child {
+            border-bottom: none;
+        }
+        .case-study-data li:hover {
+            background-color: #e9ecef;
+        }
+        .case-study-data .label {
+            font-weight: 500;
+            color: var(--color-text-light);
+        }
+        .case-study-data .value {
+            font-weight: 600;
+            color: var(--color-secondary);
+        }
+
+        /* --- TEAM SECTION --- */
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            justify-content: center;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .team-card {
+            text-align: center;
+            padding: 24px;
+            background: var(--color-bg);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--color-border);
+            cursor: pointer;
+            transition: all var(--transition-speed) ease;
+        }
+        .team-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--color-primary);
+        }
+        .team-card .initials {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background-color: var(--color-primary);
+            color: var(--color-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 0 auto 16px auto;
+        }
+        .team-card .name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--color-secondary);
+        }
+        .team-card .role {
+            color: var(--color-text-light);
+        }
+
+        /* --- FOOTER --- */
+        .footer {
+            background-color: var(--color-secondary);
+            color: var(--color-accent);
+            padding: 60px 0;
+            text-align: center;
+        }
+        .footer .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 24px;
+        }
+        .footer-logo svg {
+            width: 200px;
+            height: auto;
+        }
+        .footer-logo svg path { stroke: var(--color-accent); }
+        .footer-logo svg text:nth-of-type(1) { fill: var(--color-bg); }
+        .footer-logo svg text:nth-of-type(2) { fill: var(--color-accent); }
+        
+        .footer-contact {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 16px 32px;
+            font-size: 0.9rem;
+        }
+        .footer-contact a {
+            color: var(--color-accent);
+            text-decoration: none;
+            transition: color var(--transition-speed) ease;
+        }
+        .footer-contact a:hover {
+            color: var(--color-primary);
+        }
+        .footer-copyright {
+            margin-top: 24px;
+            font-size: 0.8rem;
+        }
+
+        /* --- MODAL --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(35, 47, 62, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity var(--transition-speed) ease, visibility 0s var(--transition-speed) linear;
+        }
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+            transition-delay: 0s;
+        }
+        .modal-content {
+            background-color: var(--color-bg);
+            padding: 40px;
+            border-radius: var(--border-radius);
+            max-width: 600px;
+            width: 90%;
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            transform: scale(0.95);
+            transition: transform var(--transition-speed) ease;
+        }
+        .modal-overlay.active .modal-content {
+            transform: scale(1);
+        }
+        .modal-close {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--color-text-light);
+            transition: color var(--transition-speed) ease;
+        }
+        .modal-close:hover {
+            color: var(--color-secondary);
+        }
+        .modal-title {
+            font-family: var(--font-heading);
+            font-size: 1.8rem;
+            margin-bottom: 24px;
+        }
+        .modal-body {
+            font-size: 1rem;
+            color: var(--color-text-light);
+            line-height: 1.8;
+        }
+        .modal-body ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        .modal-body li {
+            padding: 8px 0 8px 20px;
+            position: relative;
+        }
+        .modal-body li::before {
+            content: '›';
+            position: absolute;
+            left: 0;
+            color: var(--color-primary);
+            font-weight: bold;
+        }
+
+        /* --- RESPONSIVE DESIGN --- */
+        @media (max-width: 992px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                flex-direction: column;
+                background-color: var(--color-bg);
+                padding: 16px 0;
+                box-shadow: var(--shadow-sm);
+            }
+            .nav-links.active {
+                display: flex;
+            }
+            .nav-links li {
+                width: 100%;
+                text-align: center;
+            }
+            .nav-links a {
+                padding: 12px;
+                display: block;
+            }
+            .mobile-nav-toggle {
+                display: block;
+            }
+            .hero h1 { font-size: 2.8rem; }
+            .hero p { font-size: 1.1rem; }
+            .hero-stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .case-study-container { flex-direction: column; }
+        }
+
+        @media (max-width: 768px) {
+            .section { padding: 60px 0; }
+            .section-header h2 { font-size: 2rem; }
+            .hero { height: auto; padding: 150px 0 200px 0; }
+            .hero-stats-bar { position: relative; padding: 30px 0; background-color: var(--color-secondary); }
+            .card-grid { grid-template-columns: 1fr; }
+            .metrics-grid { grid-template-columns: 1fr; }
+            .team-grid { grid-template-columns: 1fr; }
+            .footer-contact { flex-direction: column; gap: 8px; }
+
+            /* Mobile Drawer/Bottom Sheet */
+            .modal-overlay {
+                align-items: flex-end;
+            }
+            .modal-content {
+                width: 100%;
+                max-width: 100%;
+                border-radius: var(--border-radius) var(--border-radius) 0 0;
+                transform: translateY(100%);
+            }
+            .modal-overlay.active .modal-content {
+                transform: translateY(0);
+            }
+        }
+        
+        /* Staggered animation */
+        .stagger-children > * {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="main-nav">
+        <div class="container">
+            <a href="#" class="nav-logo">
+                <svg width="200" height="50" xmlns="http://www.w3.org/2000/svg"><path d="M10 20 Q100 0 190 20" stroke="#A7A9AC" stroke-width="1" fill="none"/><text x="50%" y="35" font-family="Inter, sans-serif" font-size="14" fill="#232F3E" text-anchor="middle">Arch Street</text><text x="50%" y="48" font-family="Inter, sans-serif" font-size="8" fill="#A7A9AC" text-anchor="middle" letter-spacing="1">CAPITAL ADVISORS</text></svg>
+            </a>
+            <nav>
+                <ul class="nav-links" id="nav-links">
+                    <li><a href="#overview" class="nav-link">Overview</a></li>
+                    <li><a href="#highlights" class="nav-link">Highlights</a></li>
+                    <li><a href="#strategy-advantages" class="nav-link">Strategy</a></li>
+                    <li><a href="#competitive-advantages" class="nav-link">Advantages</a></li>
+                    <li><a href="#track-record" class="nav-link">Track Record</a></li>
+                    <li><a href="#fund-details" class="nav-link">Fund Details</a></li>
+                    <li><a href="#case-study" class="nav-link">Case Study</a></li>
+                    <li><a href="#team" class="nav-link">Team</a></li>
+                </ul>
+            </nav>
+            <button class="mobile-nav-toggle" id="mobile-nav-toggle" aria-label="Toggle navigation">☰</button>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <canvas id="hero-canvas"></canvas>
+            <div class="hero-content">
+                <div class="hero-logo">
+                    <svg width="250" height="62.5" xmlns="http://www.w3.org/2000/svg"><path d="M12.5 25 Q125 0 237.5 25" stroke="#A7A9AC" stroke-width="1.25" fill="none"/><text x="50%" y="43.75" font-family="Inter, sans-serif" font-size="17.5" fill="#FFFFFF" text-anchor="middle">Arch Street</text><text x="50%" y="60" font-family="Inter, sans-serif" font-size="10" fill="#A7A9AC" text-anchor="middle" letter-spacing="1.25">CAPITAL ADVISORS</text></svg>
+                </div>
+                <h1>Arch Street Capital Advisors</h1>
+                <p>New York & London Real Estate Investment Firm specializing in business-critical, single-tenant, long-term leased assets</p>
+            </div>
+            <div class="hero-stats-bar">
+                <div class="container">
+                    <div class="hero-stats-grid">
+                        <div class="hero-stat" data-modal-title="Years of Experience" data-modal-content="Arch Street Capital Advisors was founded in 2003, providing over two decades of experience in real estate investment.">
+                            <div class="value" data-target="20">0+</div>
+                            <div class="label">Years of Experience</div>
+                        </div>
+                        <div class="hero-stat" data-modal-title="Billion of Transactions" data-modal-content="Since inception, Arch Street has completed more than $9.7 billion in U.S. real estate transactions.">
+                            <div class="value" data-target="9.7">0+</div>
+                            <div class="label">Billion of Transactions</div>
+                        </div>
+                        <div class="hero-stat" data-modal-title="Million SF Under Management" data-modal-content="Managing a significant portfolio of assets across the United States.">
+                            <div class="value" data-target="50">0+</div>
+                            <div class="label">Million SF Under Management</div>
+                        </div>
+                        <div class="hero-stat" data-modal-title="States with Owned Assets" data-modal-content="Our portfolio is geographically diversified across more than 30 states.">
+                            <div class="value" data-target="30">0+</div>
+                            <div class="label">States with Owned Assets</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="overview" class="section">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Company Overview <span class="toggle-icon">+</span></h2>
+                </div>
+                <div class="section-content">
+                    <p>Arch Street Capital Advisors "Arch Street" is a minority-owned, full-service real estate investment firm. Founded in 2003, with offices in New York and London, Arch Street has completed more than $9.7 billion in U.S. real estate transactions across major and niche commercial property sectors. Since inception, Arch Street has invested capital for a client base of institutional investors, exclusively on a separate account basis. Arch Business Critical Income Fund I ("ABC Income Fund I") will represent the first opportunity for institutional investors to participate as limited partners in a closed-end fund vehicle managed by Arch Street as general partner.</p>
+                    <ul class="overview-bullets stagger-children">
+                        <li data-modal-title="Ownership Structure" data-modal-content="Arch Street is a minority-owned, full-service real estate investment firm, emphasizing diversity and inclusion from its foundation.">Minority-Owned, full-service real estate investment firm</li>
+                        <li data-modal-title="Management Experience" data-modal-content="The senior team brings a wealth of experience, averaging over 20 years in real estate and having worked together for more than 16 years, ensuring a stable and cohesive leadership.">Senior Management Team Averages 20+ Years of Real Estate Experience and 16+ Years Working Together</li>
+                        <li data-modal-title="Team Diversity" data-modal-content="Diversity is a core tenet of our firm, with an 80% diverse Senior Management Team and over 50% of the entire team comprised of women or minorities.">80% Diverse Senior Management Team; 50%+ of Overall Team is Comprised of Women or Minorities</li>
+                        <li data-modal-title="Investment Strategy Focus" data-modal-content="For over two decades, our core investment strategy has been focused on Business-Critical, Single-Tenant, Long-term Leased Assets, providing stable and predictable returns.">20+ Years investing in Business-Critical, Single-Tenant, Long-term Leased Assets (the “Investment Strategy”)</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="highlights" class="section">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Investment Highlights <span class="toggle-icon">+</span></h2>
+                </div>
+                <div class="section-content">
+                    <div class="card-grid stagger-children">
+                        <div class="card" data-modal-title="Experienced and Aligned Management Team">
+                            <h3>Experienced and Aligned Management Team</h3>
+                            <ul>
+                                <li>Senior Management Team Averages 20+ Years of Real Estate Experience</li>
+                                <li>Senior Management Team has 16+ Years Working Together</li>
+                                <li>GP Co-investment of 1%</li>
+                            </ul>
+                            <div class="key-metric">20+ Years</div>
+                        </div>
+                        <div class="card" data-modal-title="Diverse and Inclusive Firm Structure">
+                            <h3>Diverse and Inclusive Firm Structure</h3>
+                            <ul>
+                                <li>Minority-Owned, full-service real estate investment firm</li>
+                                <li>80% Diverse Senior Management Team</li>
+                                <li>50%+ of Overall Team is Comprised of Women or Minorities</li>
+                            </ul>
+                            <div class="key-metric">80% Diverse SMT</div>
+                        </div>
+                        <div class="card" data-modal-title="Proven Investment Strategy in Niche Assets">
+                            <h3>Proven Investment Strategy in Niche Assets</h3>
+                            <ul>
+                                <li>20+ Years investing in Business-Critical, Single-Tenant, Long-term Leased Assets</li>
+                                <li>Completed more than $9.7 billion in U.S. real estate transactions</li>
+                                <li>Track record includes $3.0 Billion in Acquisitions and $1.2 Billion of Realized Investments with a 19.8% Net IRR</li>
+                            </ul>
+                            <div class="key-metric">19.8% Net IRR</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="strategy-advantages" class="section">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Strategy Advantages <span class="toggle-icon">+</span></h2>
+                </div>
+                <div class="section-content">
+                    <div class="card-grid stagger-children">
+                        <div class="card" data-modal-title="Business-Critical, Single-Tenant Properties" data-modal-content="High tenant retention and low credit / collection loss provide a durable income stream.">
+                            <div class="icon">🏢</div>
+                            <h3>Business-Critical, Single-Tenant Properties</h3>
+                            <p>High tenant retention and low credit / collection loss provide a durable income stream</p>
+                        </div>
+                        <div class="card" data-modal-title="Inflation Hedge" data-modal-content="Contractual rent increases and allocation of operating expenses provide an inflation hedge and cash flow preservation.">
+                            <div class="icon">🛡️</div>
+                            <h3>Inflation Hedge</h3>
+                            <p>Contractual rent increases and allocation of operating expenses provide an inflation hedge and cash flow preservation</p>
+                        </div>
+                        <div class="card" data-modal-title="Predictable Cash Flows" data-modal-content="Reliable, predictable cash flows and income-driven returns reduce residual value risk at exit.">
+                            <div class="icon">📈</div>
+                            <h3>Predictable Cash Flows</h3>
+                            <p>Reliable, predictable cash flows and income-driven returns reduce residual value risk at exit</p>
+                        </div>
+                        <div class="card" data-modal-title="Rollover Risk Mitigation" data-modal-content="Long average remaining lease term eliminates rollover risk during Fund life and affords efficient financing.">
+                            <div class="icon">🔄</div>
+                            <h3>Rollover Risk Mitigation</h3>
+                            <p>Long average remaining lease term eliminates rollover risk during Fund life and affords efficient financing</p>
+                        </div>
+                        <div class="card" data-modal-title="Portfolio Diversification" data-modal-content="Portfolio diversification across property types, markets, industries and credit mitigates risk.">
+                            <div class="icon">📊</div>
+                            <h3>Portfolio Diversification</h3>
+                            <p>Portfolio diversification across property types, markets, industries and credit mitigates risk</p>
+                        </div>
+                        <div class="card" data-modal-title="Aggregation Flexibility" data-modal-content="Flexibility to aggregate single-asset transactions and benefit from a portfolio premium at exit.">
+                            <div class="icon">➕</div>
+                            <h3>Aggregation Flexibility</h3>
+                            <p>Flexibility to aggregate single-asset transactions and benefit from a portfolio premium at exit</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="competitive-advantages" class="section">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Competitive Advantages <span class="toggle-icon">+</span></h2>
+                </div>
+                <div class="section-content">
+                    <div class="card-grid stagger-children">
+                        <div class="card" data-modal-title="CUSTOMIZED APPROACH" data-modal-content="Ability to design customized vehicles and fund offerings supported by expertise across real estate sectors, asset types and risk-profiles.">
+                            <h3>CUSTOMIZED APPROACH</h3>
+                            <p>Ability to design customized vehicles and fund offerings supported by expertise across real estate sectors, asset types and risk-profiles</p>
+                        </div>
+                        <div class="card" data-modal-title="STRUCTURAL EXPERTISE" data-modal-content="Experience investing across the capital structure providing flexibility to pursue optimal risk /return positions.">
+                            <h3>STRUCTURAL EXPERTISE</h3>
+                            <p>Experience investing across the capital structure providing flexibility to pursue optimal risk /return positions</p>
+                        </div>
+                        <div class="card" data-modal-title="CYCLE-TESTED TEAM" data-modal-content="20+ years of experience serving global capital partners through multiple business cycles.">
+                            <h3>CYCLE-TESTED TEAM</h3>
+                            <p>20+ years of experience serving global capital partners through multiple business cycles</p>
+                        </div>
+                        <div class="card" data-modal-title="LONG-STANDING RELATIONSHIPS" data-modal-content="20+ years of building extensive industry relationships critical for sourcing investment opportunities, financing acquisitions and maximizing value of assets.">
+                            <h3>LONG-STANDING RELATIONSHIPS</h3>
+                            <p>20+ years of building extensive industry relationships critical for sourcing investment opportunities, financing acquisitions and maximizing value of assets</p>
+                        </div>
+                        <div class="card" data-modal-title="IN-HOUSE CAPABILITIES" data-modal-content="Arch's internal resources include Acquisitions, Financing, Asset Management, Dispositions, and Tax & Audit Coordination.">
+                            <h3>IN-HOUSE CAPABILITIES</h3>
+                            <p>Arch's internal resources include Acquisitions, Financing, Asset Management, Dispositions, and Tax & Audit Coordination</p>
+                        </div>
+                        <div class="card" data-modal-title="SECTOR EXPERTISE" data-modal-content="Experience acquiring, financing and managing assets across major and niche commercial property sectors.">
+                            <h3>SECTOR EXPERTISE</h3>
+                            <p>Experience acquiring, financing and managing assets across major and niche commercial property sectors</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="track-record" class="section">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Investment Strategy Track Record <span class="toggle-icon">+</span></h2>
+                </div>
+                <div class="section-content">
+                    <div class="metrics-grid stagger-children">
+                        <div class="metric-card" data-modal-title="Acquisitions" data-modal-content="Total value of acquisitions under our proven investment strategy.">
+                            <div class="value">$<span data-target="3.0">0</span> Billion</div>
+                            <div class="label">Acquisitions</div>
+                        </div>
+                        <div class="metric-card" data-modal-title="Realized Investments" data-modal-content="Total value of investments that have been successfully realized.">
+                            <div class="value">$<span data-target="1.2">0</span> Billion</div>
+                            <div class="label">Realized Investments</div>
+                        </div>
+                        <div class="metric-card" data-modal-title="Net IRR" data-modal-content="Net Internal Rate of Return achieved on realized investments.">
+                            <div class="value"><span data-target="19.8">0</span>%</div>
+                            <div class="label">Net IRR</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="fund-details" class="section">
+            <div class="container">
+                <div class="section-header">
+                    <h2>ABC Income Fund I Overview <span class="toggle-icon">+</span></h2>
+                </div>
+                <div class="section-content">
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Metric</th>
+                                    <th>Value</th>
+                                </tr>
+                            </thead>
+                            <tbody class="stagger-children">
+                                <tr data-modal-title="Target Fund Size" data-modal-content="The total capital commitment we are seeking for ABC Income Fund I."><td>Target Fund Size</td><td>$200MM</td></tr>
+                                <tr data-modal-title="Target Return" data-modal-content="Projected returns for investors, including Gross IRR, Net IRR, and annual cash distributions."><td>Target Return</td><td>11-13% Gross IRR, 9-11% Net IRR, 7-8% annual cash distribution</td></tr>
+                                <tr data-modal-title="First Close" data-modal-content="The anticipated date for the first closing of the fund."><td>First Close</td><td>MM/2023</td></tr>
+                                <tr data-modal-title="GP Co-investment" data-modal-content="The General Partner's commitment to the fund, ensuring alignment of interests with Limited Partners."><td>GP Co-investment</td><td>1%</td></tr>
+                                <tr data-modal-title="Investment Period" data-modal-content="The period during which the fund will actively deploy capital into new investments."><td>Investment Period</td><td>36 months from first closing</td></tr>
+                                <tr data-modal-title="Term" data-modal-content="The total expected lifespan of the fund from inception to liquidation."><td>Term</td><td>7 Years</td></tr>
+                                <tr data-modal-title="Leverage" data-modal-content="The anticipated level of debt financing to be used at the portfolio level."><td>Leverage</td><td>~60% Portfolio Level</td></tr>
+                                <tr data-modal-title="Management Fee" data-modal-content="Fee structure: 1.50% of commitments during the Investment Period, and 1.50% of invested capital thereafter."><td>Management Fee</td><td>1.50% of commitments during Investment Period, 1.50% of invested capital after Investment Period</td></tr>
+                                <tr data-modal-title="Incentive Fee" data-modal-content="The performance-based fee structure (carried interest) based on a European Waterfall model."><td>Incentive Fee</td><td>European Waterfall: 100% return of capital, 8% preferred return, 50%/50% catch-up, 80%/20% thereafter</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="case-study" class="section">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Case Study <span class="toggle-icon">+</span></h2>
+                </div>
+                <div class="section-content">
+                    <div class="case-study-container">
+                        <div class="case-study-content">
+                            <h3>U.S. Industrial Aggregation Strategy (Nationwide)</h3>
+                            <p><strong>Strategy:</strong> Long average remaining lease terms with diversity in tenancy, geography and industry exposure. Facilities are critical to tenants' operations, and in many cases serve as headquarters facilities. Experienced and highly regarded joint venture operating partner.</p>
+                        </div>
+                        <div class="case-study-data">
+                            <ul class="stagger-children">
+                                <li data-modal-title="Acquisition Period" data-modal-content="The timeframe during which the assets for this strategy were acquired."><span class="label">Acquired</span><span class="value">Aug 2014 - Dec 2016</span></li>
+                                <li data-modal-title="Equity Invested" data-modal-content="The total equity capital invested in the aggregation strategy."><span class="label">Equity</span><span class="value">$52.9 million</span></li>
+                                <li data-modal-title="Total Capitalization" data-modal-content="The total value of the portfolio, including both equity and debt."><span class="label">Capitalization</span><span class="value">$120.8 million</span></li>
+                                <li data-modal-title="Leverage Ratio" data-modal-content="The loan-to-value (LTV) ratio for the portfolio financing."><span class="label">Leverage</span><span class="value">58% LTV</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="team" class="section">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Leadership Team <span class="toggle-icon">+</span></h2>
+                </div>
+                <div class="section-content">
+                    <div class="team-grid stagger-children">
+                        <div class="team-card" data-modal-title="Craig Friedman" data-modal-content="Founder of Arch Street Capital Advisors.">
+                            <div class="initials">CF</div>
+                            <div class="name">Craig Friedman</div>
+                            <div class="role">Founder</div>
+                        </div>
+                        <div class="team-card" data-modal-title="Anup Patel" data-modal-content="CEO of Arch Street Capital Advisors.">
+                            <div class="initials">AP</div>
+                            <div class="name">Anup Patel</div>
+                            <div class="role">CEO</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-logo">
+                <svg width="200" height="50" xmlns="http://www.w3.org/2000/svg"><path d="M10 20 Q100 0 190 20" stroke="#A7A9AC" stroke-width="1" fill="none"/><text x="50%" y="35" font-family="Inter, sans-serif" font-size="14" fill="#FFFFFF" text-anchor="middle">Arch Street</text><text x="50%" y="48" font-family="Inter, sans-serif" font-size="8" fill="#A7A9AC" text-anchor="middle" letter-spacing="1">CAPITAL ADVISORS</text></svg>
+            </div>
+            <div class="footer-contact">
+                <span>70 W 40th Street, 3rd Floor, New York, NY 10018</span>
+                <a href="tel:+12122248981">+1 (212) 224-8981</a>
+                <a href="tel:+12122248983">+1 (212) 224-8983</a>
+                <a href="mailto:cfriedman@archstreetcapital.com">cfriedman@archstreetcapital.com</a>
+                <a href="mailto:apatel@archstreetcapital.com">apatel@archstreetcapital.com</a>
+            </div>
+            <div class="footer-copyright">
+                &copy; 2023 Arch Street Capital Advisors. All Rights Reserved.
+            </div>
+        </div>
+    </footer>
+
+    <div class="modal-overlay" id="modal-overlay">
+        <div class="modal-content" id="modal-content">
+            <button class="modal-close" id="modal-close">&times;</button>
+            <h3 class="modal-title" id="modal-title"></h3>
+            <div class="modal-body" id="modal-body"></div>
+        </div>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+        // --- HERO CANVAS ANIMATION ---
+        const canvas = document.getElementById('hero-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        const particleCount = 50;
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.vx = (Math.random() - 0.5) * 0.3;
+                this.vy = (Math.random() - 0.5) * 0.3;
+                this.radius = 1.5;
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+
+                if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(141, 198, 63, 0.5)';
+                ctx.fill();
+            }
+        }
+
+        function initParticles() {
+            particles = [];
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+
+            // Draw lines between nearby particles
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < 150) {
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.strokeStyle = `rgba(167, 169, 172, ${1 - distance / 150})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.stroke();
+                    }
+                }
+            }
+            requestAnimationFrame(animate);
+        }
+        initParticles();
+        animate();
+
+
+        // --- INTERSECTION OBSERVER FOR ANIMATIONS ---
+        const animateOnScroll = (entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    
+                    // Stagger children animation
+                    const children = entry.target.querySelectorAll('.stagger-children > *');
+                    children.forEach((child, index) => {
+                        setTimeout(() => {
+                            child.style.opacity = '1';
+                            child.style.transform = 'translateY(0)';
+                        }, index * 100);
+                    });
+
+                    // Animate counters
+                    const counters = entry.target.querySelectorAll('[data-target]');
+                    counters.forEach(counter => {
+                        if (counter.dataset.animated) return;
+                        counter.dataset.animated = true;
+                        const target = +counter.dataset.target;
+                        const isFloat = target % 1 !== 0;
+                        let current = 0;
+                        const increment = target / 100;
+
+                        const updateCounter = () => {
+                            if (current < target) {
+                                current += increment;
+                                counter.innerText = isFloat ? current.toFixed(1) : Math.ceil(current);
+                                requestAnimationFrame(updateCounter);
+                            } else {
+                                counter.innerText = target;
+                            }
+                        };
+                        updateCounter();
+                    });
+                    
+                    observer.unobserve(entry.target);
+                }
+            });
+        };
+
+        const observer = new IntersectionObserver(animateOnScroll, {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        });
+
+        document.querySelectorAll('.section').forEach(section => {
+            observer.observe(section);
+        });
+        
+        // --- SCROLLSPY NAVIGATION ---
+        const navLinks = document.querySelectorAll('.nav-link');
+        const sections = document.querySelectorAll('.section');
+
+        const scrollSpyObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    navLinks.forEach(link => {
+                        link.classList.remove('active');
+                        if (link.getAttribute('href').substring(1) === entry.target.id) {
+                            link.classList.add('active');
+                        }
+                    });
+                }
+            });
+        }, { rootMargin: "-50% 0px -50% 0px" });
+
+        sections.forEach(section => scrollSpyObserver.observe(section));
+        
+        // --- MOBILE NAVIGATION ---
+        const mobileNavToggle = document.getElementById('mobile-nav-toggle');
+        const navLinksContainer = document.getElementById('nav-links');
+        mobileNavToggle.addEventListener('click', () => {
+            navLinksContainer.classList.toggle('active');
+        });
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                if (navLinksContainer.classList.contains('active')) {
+                    navLinksContainer.classList.remove('active');
+                }
+            });
+        });
+
+        // --- MODAL INTERACTIVITY ---
+        const modalOverlay = document.getElementById('modal-overlay');
+        const modalContent = document.getElementById('modal-content');
+        const modalTitle = document.getElementById('modal-title');
+        const modalBody = document.getElementById('modal-body');
+        const modalClose = document.getElementById('modal-close');
+
+        function openModal(title, content) {
+            modalTitle.textContent = title;
+            modalBody.innerHTML = content;
+            modalOverlay.classList.add('active');
+        }
+
+        function closeModal() {
+            modalOverlay.classList.remove('active');
+        }
+
+        document.querySelectorAll('[data-modal-title]').forEach(el => {
+            el.addEventListener('click', () => {
+                const title = el.dataset.modalTitle;
+                let content = el.dataset.modalContent;
+                
+                // If the element is a card, get its inner content for the modal
+                if (!content && el.classList.contains('card')) {
+                    const list = el.querySelector('ul');
+                    const p = el.querySelector('p');
+                    if (list) {
+                        content = list.outerHTML;
+                    } else if (p) {
+                        content = p.outerHTML;
+                    }
+                }
+                
+                openModal(title, content || 'No additional details available.');
+            });
+        });
+
+        modalClose.addEventListener('click', closeModal);
+        modalOverlay.addEventListener('click', (e) => {
+            if (e.target === modalOverlay) {
+                closeModal();
+            }
+        });
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modalOverlay.classList.contains('active')) {
+                closeModal();
+            }
+        });
+
+        // --- ACCORDION FOR SECTIONS ---
+        document.querySelectorAll('.section-header').forEach(header => {
+            header.addEventListener('click', () => {
+                const section = header.closest('.section');
+                section.classList.toggle('collapsed');
+            });
+        });
+
+        // Auto-expand section on nav click
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetId = link.getAttribute('href');
+                const targetSection = document.querySelector(targetId);
+                if (targetSection) {
+                    targetSection.classList.remove('collapsed');
+                    // Use a small timeout to ensure the section starts expanding before scrolling
+                    setTimeout(() => {
+                        targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }, 100);
+                }
+            });
+        });
+
+    });
+    </script>
+
+<!-- Yajur Analytics Tracking -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(function(){
+  var SB_URL='https://eflvzsfgoelonfclzrjy.supabase.co',SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVmbHZ6c2Znb2Vsb25mY2x6cmp5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDc2NTYxOTAsImV4cCI6MjA2MzIzMjE5MH0.LCxuFDJuBO8ggiqdWpv5uoOkplKWbcF8z5E_kdpOEWU',PID='84142fdb-ac53-4af3-8362-b335fe8d8969';
+  var sb=null,sid=null,start=Date.now(),maxScroll=0,visitId=null,flushed=false;
+  var milestones=new Set(),sectionTimers={};
+  try{
+    if(window.supabase){
+      sb=window.supabase.createClient(SB_URL,SB_KEY);
+      sid=crypto.randomUUID?crypto.randomUUID():'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,function(c){var r=Math.random()*16|0;return(c==='x'?r:(r&0x3|0x8)).toString(16)});
+      var up=new URLSearchParams(window.location.search);
+      function devType(){var w=window.innerWidth;return w<768?'mobile':w<1024?'tablet':'desktop'}
+      (async function(){
+        var d=await sb.from('page_visits').insert({project_id:PID,session_id:sid,referrer:document.referrer||null,user_agent:navigator.userAgent,device_type:devType(),screen_width:screen.width,screen_height:screen.height,utm_source:up.get('utm_source'),utm_medium:up.get('utm_medium'),utm_campaign:up.get('utm_campaign')}).select('id').single();
+        if(d.data)visitId=d.data.id;
+      })();
+      trk('page_view',location.pathname,{referrer:document.referrer});
+    }
+  }catch(e){console.warn('Analytics init:',e)}
+
+  function trk(type,target,data,section){
+    if(!sb)return;
+    sb.from('page_events').insert({project_id:PID,session_id:sid,event_type:type,event_target:target||null,event_data:data||{},section_id:section||null}).then(function(){});
+  }
+
+  // Scroll depth
+  var st=null;
+  window.addEventListener('scroll',function(){
+    if(st)return;
+    st=setTimeout(function(){
+      st=null;
+      var top=window.scrollY,h=document.documentElement.scrollHeight-window.innerHeight;
+      if(h<=0)return;
+      var pct=Math.round(top/h*100);
+      if(pct>maxScroll)maxScroll=pct;
+      [25,50,75,90,100].forEach(function(m){if(pct>=m&&!milestones.has(m)){milestones.add(m);trk('scroll_milestone',m+'%',{percent:m})}});
+    },250);
+  });
+
+  // Section time tracking
+  var obs=new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      var id=e.target.id||'unknown';
+      if(!sectionTimers[id])sectionTimers[id]={enter:null,total:0};
+      if(e.isIntersecting){sectionTimers[id].enter=Date.now()}
+      else if(sectionTimers[id].enter){sectionTimers[id].total+=Date.now()-sectionTimers[id].enter;sectionTimers[id].enter=null}
+    });
+  },{threshold:0.3});
+
+  document.addEventListener('DOMContentLoaded',function(){
+    document.querySelectorAll('section[id],div[id]').forEach(function(el){if(el.id)obs.observe(el)});
+    var first=document.querySelector('section');
+    if(first&&!first.id){first.id='hero';obs.observe(first)}
+  });
+
+  // Click tracking
+  document.addEventListener('click',function(e){
+    var el=e.target.closest('a,button,[onclick]');
+    if(!el)return;
+    var sec=el.closest('section[id],div[id]');
+    trk('link_click',el.textContent.trim().substring(0,80),{href:el.href||'',tag:el.tagName},sec?sec.id:null);
+  });
+
+  // Flush on exit
+  function flush(){
+    if(flushed||!sb)return;flushed=true;
+    Object.keys(sectionTimers).forEach(function(id){
+      if(sectionTimers[id].enter){sectionTimers[id].total+=Date.now()-sectionTimers[id].enter;sectionTimers[id].enter=null}
+    });
+    Object.entries(sectionTimers).forEach(function(e){
+      if(e[1].total>500)trk('section_view',e[0],{duration_ms:e[1].total,duration_seconds:Math.round(e[1].total/1000)},e[0]);
+    });
+    if(visitId){
+      var dur=Math.round((Date.now()-start)/1000);
+      fetch(SB_URL+'/rest/v1/page_visits?id=eq.'+visitId,{method:'PATCH',headers:{'Content-Type':'application/json','apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Prefer':'return=minimal'},body:JSON.stringify({duration_seconds:dur,max_scroll_percent:maxScroll}),keepalive:true}).catch(function(){});
+    }
+  }
+  window.addEventListener('beforeunload',flush);
+  document.addEventListener('visibilitychange',function(){if(document.visibilityState==='hidden')flush()});
+})();
+</script>
+</body>
+</html>
